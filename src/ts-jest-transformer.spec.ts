@@ -57,7 +57,7 @@ describe('process', () => {
     args = [INPUT, FILE, JEST_CONFIG, OPTIONS]
     jest
       .spyOn(tr, 'configsFor')
-      .mockImplementation(() => config)
+      .mockImplementation(() => config as any)
       .mockClear()
     config.shouldStringifyContent.mockImplementation(() => false).mockClear()
     babel = null
@@ -236,7 +236,7 @@ Array [
 describe('getCacheKey', () => {
   it('should be different for each argument value', () => {
     const tr = new TsJestTransformer()
-    jest.spyOn(tr, 'configsFor').mockImplementation(jestConfigStr => ({ cacheKey: jestConfigStr }))
+    jest.spyOn(tr, 'configsFor').mockImplementation(jestConfigStr => ({ cacheKey: jestConfigStr } as any))
     const input = {
       fileContent: 'export default "foo"',
       fileName: 'foo.ts',

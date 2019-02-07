@@ -59,7 +59,7 @@ function describeChecker(
     supportedVersions.forEach(testVersion => {
       describe(`supported version (${testVersion})`, () => {
         beforeEach(() => {
-          pv.getPackageVersion.mockImplementation(name => (name === moduleName ? testVersion : undefined))
+          pv.getPackageVersion.mockImplementation(() => name => (name === moduleName ? testVersion : undefined))
         })
         it(`should not log with warn()`, () => {
           checker.warn()

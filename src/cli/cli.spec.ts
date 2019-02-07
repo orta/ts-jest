@@ -32,9 +32,9 @@ const runCli = async (
 let mockedProcess: any
 const FAKE_CWD = normalize('/foo/bar')
 const FAKE_PKG = normalize(`${FAKE_CWD}/package.json`)
-fs.existsSync.mockImplementation(f => f === FAKE_PKG)
+fs.existsSync.mockImplementation(() => f => f === FAKE_PKG)
 fs.readFileSync.mockImplementation(f => {
-  if (f === FAKE_PKG) return JSON.stringify({ name: 'mock', version: '0.0.0-mock.0' })
+  if (f === FAKE_PKG) return JSON.stringify({ name: 'mock', version: '0.0.0-mock.0' }) as any
   throw new Error('ENOENT')
 })
 
@@ -295,21 +295,21 @@ Options:
 
     it('should fail if the config file does not exist', async () => {
       expect.assertions(1)
-      fs.existsSync.mockImplementation(() => false)
+      fs.existsSync.mockImplementation(() => () => false)
       const res = await runCli(...noOption, pkgPaths.next)
       expect(res.log).toMatch(/does not exists/)
     })
 
     it('should fail if the config file is not of good type', async () => {
       expect.assertions(1)
-      fs.existsSync.mockImplementation(() => true)
+      fs.existsSync.mockImplementation(() => () => true)
       const res = await runCli(...noOption, `${pkgPaths.next}.foo`)
       expect(res.log).toMatch(/must be a JavaScript or JSON file/)
     })
 
     it('should migrate from package.json (without options)', async () => {
       expect.assertions(2)
-      fs.existsSync.mockImplementation(() => true)
+      fs.existsSync.mockImplementation(() => () => true)
       jest.mock(
         pkgPaths.next,
         () => ({
@@ -348,7 +348,7 @@ Visit https://kulshekhar.github.io/ts-jest/user/config/#jest-preset for more inf
 
     it('should migrate from package.json (with options)', async () => {
       expect.assertions(2)
-      fs.existsSync.mockImplementation(() => true)
+      fs.existsSync.mockImplementation(() => () => true)
       jest.mock(
         pkgPaths.next,
         () => ({
@@ -381,7 +381,7 @@ Migrated Jest configuration:
 
     it('should detect same option values', async () => {
       expect.assertions(1)
-      fs.existsSync.mockImplementation(() => true)
+      fs.existsSync.mockImplementation(() => () => true)
       jest.mock(
         pkgPaths.next,
         () => ({
@@ -416,7 +416,7 @@ Migrated Jest configuration:
 
     it('should reset testMatch if testRegex is used', async () => {
       expect.assertions(1)
-      fs.existsSync.mockImplementation(() => true)
+      fs.existsSync.mockImplementation(() => () => true)
       jest.mock(
         pkgPaths.next,
         () => ({
@@ -439,7 +439,7 @@ Migrated Jest configuration:
 
     it('should detect best preset', async () => {
       expect.assertions(5)
-      fs.existsSync.mockImplementation(() => true)
+      fs.existsSync.mockImplementation(() => () => true)
       jest.mock(pkgPaths.next, () => ({}), { virtual: true })
 
       // defaults
@@ -505,7 +505,7 @@ Migrated Jest configuration:
 
     it('should normalize transform values', async () => {
       expect.assertions(1)
-      fs.existsSync.mockImplementation(() => true)
+      fs.existsSync.mockImplementation(() => () => true)
       jest.mock(
         pkgPaths.next,
         () => ({

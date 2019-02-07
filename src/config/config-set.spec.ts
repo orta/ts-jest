@@ -361,10 +361,11 @@ describe('resolvePath', () => {
 }) // resolvePath
 
 describe('readTsConfig', () => {
-  let findConfig!: jest.MockInstance<typeof ts.findConfigFile>
-  let readConfig!: jest.MockInstance<typeof ts.readConfigFile>
-  let parseConfig!: jest.MockInstance<typeof ts.parseJsonSourceFileConfigFileContent>
+  let findConfig = jest.spyOn(ts, 'findConfigFile')
+  let readConfig = jest.spyOn(ts, 'readConfigFile')
+  let parseConfig = jest.spyOn(ts, 'parseJsonConfigFileContent')
   let cs!: ConfigSet
+
   beforeAll(() => {
     findConfig = jest.spyOn(ts, 'findConfigFile')
     readConfig = jest.spyOn(ts, 'readConfigFile')
@@ -372,7 +373,7 @@ describe('readTsConfig', () => {
     cs = createConfigSet({ jestConfig: { rootDir: '/root', cwd: '/cwd' } as any })
     findConfig.mockImplementation(p => `${p}/tsconfig.json`)
     readConfig.mockImplementation(p => ({ config: { path: p, compilerOptions: {} } }))
-    parseConfig.mockImplementation((conf: any) => ({ options: conf }))
+    parseConfig.mockImplementation((conf: any) => ({ options: conf } as any))
   })
   beforeEach(() => {
     findConfig.mockClear()
